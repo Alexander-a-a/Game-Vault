@@ -8,6 +8,7 @@ const db = require('./models');
 
 
 var testRouter = require('./routes/test');
+var gamesRouter = require('./routes/games');
 
 
 const { sequelize } = db;
@@ -34,6 +35,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/test', testRouter);
+app.use('/games', gamesRouter);
 
 
 // 404 handler 

@@ -7,31 +7,34 @@ models.exports = (sequelize, Sequelize) => {
       allowNull: false,
     },
     firstname: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: false,
+      type: Sequelize.DataTypes.STRING,
+      allowNull: false,
     },
     lastname: {
-        type: Sequelize.DataTypes.STRING,
-        allowNull: false,
+      type: Sequelize.DataTypes.STRING,
+      allowNull: false,
     },
     username: {
-        type: Sequelize.DataTypes.STRING,
-        uniqe: true,
-        allowNull: false,
+      type: Sequelize.DataTypes.STRING,
+      uniqe: true,
+      allowNull: false,
     },
     email: {
-        type: Sequelize.DataTypes.STRING,
-        uniqe: true,
-        allowNull: false,
+      type: Sequelize.DataTypes.STRING,
+      uniqe: true,
+      allowNull: false,
     },
     password: {
-        type: Sequelize.DataTypes.STRING,
-        uniqe: true,
-        allowNull: false,
+      type: Sequelize.DataTypes.STRING,
+      uniqe: true,
+      allowNull: false,
     },
     telphone: {
-        type: Sequelize.DataTypes.INTEGER,
-        allowNull: false,
-    }
+      type: Sequelize.DataTypes.INTEGER,
+      allowNull: false,
+    },
+  },{
+    timestamps: false,
   });
+  return User;
 };

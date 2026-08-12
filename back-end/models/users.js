@@ -28,8 +28,8 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.DataTypes.STRING,
       allowNull: false,
     },
-    telphone: {
-      type: Sequelize.DataTypes.INTEGER,
+    telephone: {
+      type: Sequelize.DataTypes.STRING,
       allowNull: true,
     },
   },{

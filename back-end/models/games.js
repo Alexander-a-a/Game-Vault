@@ -32,7 +32,7 @@ module.exports = (sequelize, Sequelize) => {
       genres: {
         type: Sequelize.DataTypes.STRING,
         allowNull: true,
-      },
+      }, 
       platforms: {
         type: Sequelize.DataTypes.STRING,
         allowNull: true,

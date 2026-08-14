@@ -22,6 +22,25 @@ router.get("/", async function (req, res, next) {
     }
 });
 
+
+
+
+router.get("/search", async function (req, res, next) {
+    try {
+        const getAllCate = await gameService.searchAllCata(req.query);
+
+        res.status(200).json({
+            status: "success",
+            statusCode: 200,
+            data: {
+                result: getAllCate
+            }
+        });
+    } catch (err) {
+    next(err);
+    }
+});
+
 router.get("/:id", async function (req, res, next) {
     try {
         const getGame = await gameService.getGameById(req.params.id);
@@ -37,5 +56,10 @@ router.get("/:id", async function (req, res, next) {
     next(err);
     }
 });
+
+
+
+
+
 
 module.exports = router; 

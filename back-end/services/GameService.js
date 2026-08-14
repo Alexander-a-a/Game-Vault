@@ -4,6 +4,7 @@ class GameService {
     this.dotenv = require("dotenv");
   }
 
+  // Get all games
   async initGame() {
     try {
       const response = await this.axios.post(
@@ -19,7 +20,7 @@ class GameService {
       );
 
       const accesstoken = response.data.access_token;
-      console.log(accesstoken); // TEST TEST
+
 
       const gameReq = await this.axios.post(
         "https://api.igdb.com/v4/games",
@@ -32,7 +33,7 @@ class GameService {
         },
       );
 
-      console.log(gameReq.data);
+
       return gameReq.data;
     } catch (err) {
       err.httpStatus = err.httpStatus || 500;
@@ -41,6 +42,7 @@ class GameService {
     }
   }
 
+  // Get game by Id
   async getGameById(gameId) {
     if (!gameId) {
       const err = new Error("GameId is required");
@@ -84,7 +86,7 @@ class GameService {
         },
       );
 
-      console.log(gameReq.data);
+
       return gameReq.data;
     } catch (err) {
       err.httpStatus = err.httpStatus || 500;
@@ -92,6 +94,65 @@ class GameService {
       throw err;
     }
   }
+
+  // Search all endpoints
+  async searchAllCata(payload) {
+
+    const {
+      search
+    } = payload;
+
+
+    const searchQ = (search || "").trim();
+
+    if (!searchQ) {
+      const err = new Error("Search cannot be empty");
+      err.httpStatus = 400;
+      err.code = "APP_BAD_REQUEST";
+      throw err;
+    }
+
+    try {
+      const response = await this.axios.post(
+        "https://id.twitch.tv/oauth2/token?",
+        null,
+        {
+          params: {
+            client_id: process.env.IGDB_CLIENT_ID,
+            client_secret: process.env.IGDB_CLIENT_SECRET,
+            grant_type: "client_credentials",
+          },
+        },
+      );
+
+      const accesstoken = response.data.access_token;
+
+
+      const gameReq = await this.axios.post(
+        "https://api.igdb.com/v4/search",
+        `fields *; search "${searchQ}";`,
+        {
+          headers: {
+            "Client-ID": process.env.IGDB_CLIENT_ID,
+            Authorization: `Bearer ${accesstoken}`,
+          },
+        },
+      );
+
+      
+      return gameReq.data;
+    } catch (err) {
+      err.httpStatus = err.httpStatus || 500;
+      err.code = err.code || "APP_INTERNAL";
+      throw err;
+    }
+  }
+
+  // Search by name
+
+  // Search by genres
+
+  // Order by rating
 }
 
 module.exports = GameService;

@@ -143,9 +143,17 @@ class GameService {
 
   // Search by genres
 
-  // Order by rating
+  // Search by rating
+  async searchByRating(operator, rating) {
 
-  async searchByRating(rating) {
+    const allowedOps = [">", "<", ">=", "<=", "="];
+
+    if (!operator) {
+      const err = new Error("Operator is required");
+      err.httpStatus = 400;
+      err.code = "APP_BAD_REQUEST";
+      throw err;
+    }
     if (!rating) {
       const err = new Error("Rating is required");
       err.httpStatus = 400;
@@ -153,10 +161,24 @@ class GameService {
       throw err;
     }
 
+    if (!allowedOps.includes(operator)) {
+      const err = new Error("Operator can only be >, <, >=, <=, =");
+      err.httpStatus = 400;
+      err.code = "APP_BAD_REQUEST";
+      throw err;
+    }
+
     const ratingNorm = Number(rating);
 
-    if (!Number.isInteger(ratingNorm) || ratingNorm <= 0) {
-      const err = new Error("Rating must be a positive integer");
+    if (!Number.isInteger(ratingNorm) || ratingNorm < 0) {
+      const err = new Error("Rating must be between 0 and 100");
+      err.httpStatus = 400;
+      err.code = "APP_BAD_REQUEST";
+      throw err;
+    }
+
+    if (ratingNorm > 100) {
+      const err = new Error("Rating cannot be larger than 100");
       err.httpStatus = 400;
       err.code = "APP_BAD_REQUEST";
       throw err;
@@ -178,7 +200,7 @@ class GameService {
 
       const gameReq = await this.axios.post(
         "https://api.igdb.com/v4/games",
-        "fields *;",
+        `fields *; where rating ${operator} ${ratingNorm};`,
         {
           headers: {
             "Client-ID": process.env.IGDB_CLIENT_ID,
